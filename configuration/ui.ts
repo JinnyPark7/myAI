@@ -1,4 +1,4 @@
-import { JINAI, Jinny Park } from "@/configuration/identity";
+import { {AI NAME}, {OWNER NAME} } from "@/configuration/identity";
 
 export const CHAT_HEADER: string = `Ask tob JINAI`;
 export const MESSAGE_PLACEHOLDER: string = `[MESSAGE PLACEHOLDER]`;
