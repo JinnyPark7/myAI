@@ -7,26 +7,19 @@ import "katex/dist/katex.min.css";
 import { preprocessLaTeX, renderCitations } from "@/utilities/formatting";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
-interface CodeBlockProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
 export function Formatting({ message }: { message: DisplayMessage }) {
   const processedContent = preprocessLaTeX(message.content);
-
   const components = {
-    code: ({ children, className = "", ...rest }: CodeBlockProps) => {
-      const match = className.match(/language-(\w+)/);
+    code: ({ children, className, node, ...rest }: any) => {
+      const match = /language-(\w+)/.exec(className || "");
       return match ? (
         <SyntaxHighlighter
           {...rest}
           PreTag="div"
           className="rounded-xl"
+          children={String(children).replace(/\n$/, "")}
           language={match[1]}
-        >
-          {String(children).trim()}
-        </SyntaxHighlighter>
+        />
       ) : (
         <code {...rest} className={className}>
           {children}
@@ -37,15 +30,13 @@ export function Formatting({ message }: { message: DisplayMessage }) {
       return renderCitations(children, message.citations);
     },
   };
-
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeKatex]}
-      components={components}
+      components={components as any}
       className="gap-3 flex flex-col"
     >
       {processedContent}
     </ReactMarkdown>
   );
-}
